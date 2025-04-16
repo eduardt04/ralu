@@ -29,8 +29,12 @@
       </section>
 
       <section id="history-tab" class="tab" style="display: none;">
-        <h1>History</h1>
-        <p>Coming soon...</p>
+        <div class="calendar-header">
+          <button id="prevMonth">←</button>
+          <h2 id="monthLabel"></h2>
+          <button id="nextMonth">→</button>
+        </div>
+        <div id="calendar" class="calendar-grid"></div>
       </section>
     </main>
   </div>
@@ -53,7 +57,7 @@
     </form>
   </div>
 
-  <script type="module">
+  <script type="module" src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
     import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
@@ -76,11 +80,11 @@
     let totalSeconds = 0;
 
     function startTimer() {
-    if (timerInterval) return; // prevent multiple intervals
-    timerInterval = setInterval(() => {
-        totalSeconds++;
-        updateTimerDisplay();
-    }, 1000);
+        if (timerInterval) return; // prevent multiple intervals
+        timerInterval = setInterval(() => {
+            totalSeconds++;
+            updateTimerDisplay();
+        }, 1000);
     }
 
     function pauseTimer() {
@@ -136,6 +140,75 @@
     window.closePopups = function () {
       document.getElementById("end-session-popup").style.display = "none";
     };
+
+    let currentMonth = dayjs().startOf('month');
+
+    const calendarEl = document.getElementById("calendar");
+    const monthLabel = document.getElementById("monthLabel");
+
+    document.getElementById("prevMonth").addEventListener("click", () => {
+    currentMonth = currentMonth.subtract(1, 'month');
+    renderCalendar();
+    });
+
+    document.getElementById("nextMonth").addEventListener("click", () => {
+    currentMonth = currentMonth.add(1, 'month');
+    renderCalendar();
+    });
+
+    async function renderCalendar() {
+    calendarEl.innerHTML = "";
+    monthLabel.textContent = currentMonth.format("MMMM YYYY");
+
+    const startDate = currentMonth.startOf("week");
+    const endDate = currentMonth.endOf("month").endOf("week");
+
+    const date = startDate.clone();
+    const user = auth.currentUser;
+    let sessionData = {};
+
+    if (user) {
+        const snapshot = await get(ref(db, `sessions/${user.uid}`));
+        snapshot.forEach(child => {
+        const s = child.val();
+        const dateKey = dayjs(s.endedAt).format("YYYY-MM-DD");
+        if (!sessionData[dateKey]) sessionData[dateKey] = [];
+        sessionData[dateKey].push(s);
+        });
+    }
+
+    while (date.isBefore(endDate)) {
+        const day = date.format("YYYY-MM-DD");
+        const daySessions = sessionData[day] || [];
+
+        const cell = document.createElement("div");
+        cell.className = "calendar-day";
+        if (date.month() !== currentMonth.month()) {
+        cell.classList.add("disabled");
+        }
+
+        const header = document.createElement("div");
+        header.className = "day-header";
+        header.textContent = date.date();
+        cell.appendChild(header);
+
+        daySessions.forEach(s => {
+        const duration = `${Math.floor(s.duration / 3600)}h ${Math.floor((s.duration % 3600) / 60)}m`;
+        const session = document.createElement("div");
+        session.className = "session-entry";
+        session.innerHTML = `📘 ${s.chapter} (${s.pages} pages)<br/>⏱️ ${duration}`;
+        cell.appendChild(session);
+        });
+
+        calendarEl.appendChild(cell);
+        date = date.add(1, "day");
+    }
+    }
+
+    // Run calendar render once auth is ready
+    onAuthStateChanged(auth, user => {
+    if (user) renderCalendar();
+    });
   </script>
 </body>
 </html>
