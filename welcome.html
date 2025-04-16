@@ -82,26 +82,28 @@
     }
 
     function startTimer() {
-      if (!timerInterval) {
-        startTime = new Date();
+        if (timerInterval) return; // prevent multiple intervals
         timerInterval = setInterval(() => {
-          totalSeconds++;
-          const hrs = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
-          const mins = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
-          const secs = String(totalSeconds % 60).padStart(2, '0');
-          document.getElementById("timer").textContent = `${hrs}:${mins}:${secs}`;
+            totalSeconds++;
+            updateTimerDisplay();
         }, 1000);
-      }
     }
 
     function pauseTimer() {
-      clearInterval(timerInterval);
-      timerInterval = null;
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+
+    function updateTimerDisplay() {
+        const hrs = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+        const mins = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+        const secs = String(totalSeconds % 60).padStart(2, '0');
+        document.getElementById("timer").textContent = `${hrs}:${mins}:${secs}`;
     }
 
     function endSession() {
-      pauseTimer();
-      document.getElementById("end-session-popup").style.display = "block";
+        pauseTimer();
+        document.getElementById("end-session-popup").style.display = "block";
     }
 
     window.saveSession = async function () {
@@ -129,6 +131,8 @@
           alert("User not logged in.");
         }
       });
+      totalSeconds = 0;
+      updateTimerDisplay();
     };
 
     window.closePopups = function () {
