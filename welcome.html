@@ -56,8 +56,9 @@
       <button type="submit">Save Session</button>
     </form>
   </div>
-
-  <script type="module" src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js">
+  
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+  <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
     import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
