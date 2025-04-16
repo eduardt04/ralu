@@ -72,21 +72,15 @@
     const auth = getAuth(app);
     const db = getDatabase(app);
 
-    let timerInterval, totalSeconds = 0, startTime;
-
-    function showTab(tab) {
-      document.querySelectorAll(".tab").forEach(t => t.style.display = "none");
-      document.getElementById(tab + "-tab").style.display = "block";
-      document.querySelectorAll(".sidebar li").forEach(li => li.classList.remove("active"));
-      document.querySelector(`.sidebar li[onclick="showTab('${tab}')"]`).classList.add("active");
-    }
+    let timerInterval = null;
+    let totalSeconds = 0;
 
     function startTimer() {
-        if (timerInterval) return; // prevent multiple intervals
-        timerInterval = setInterval(() => {
-            totalSeconds++;
-            updateTimerDisplay();
-        }, 1000);
+    if (timerInterval) return; // prevent multiple intervals
+    timerInterval = setInterval(() => {
+        totalSeconds++;
+        updateTimerDisplay();
+    }, 1000);
     }
 
     function pauseTimer() {
