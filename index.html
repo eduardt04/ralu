@@ -95,6 +95,7 @@
         // First check if email is registered in DB
         const snapshot = await get(ref(getDatabase(), 'users'));
         let userFound = false;
+
         snapshot.forEach(childSnap => {
           if (childSnap.val().email === email) {
             userFound = true;
@@ -108,9 +109,8 @@
 
         // If found, try logging in
         await signInWithEmailAndPassword(auth, email, password);
-        alert("Login successful!");
 
-        // Store email in localStorage and redirect
+        // Store email in localStorage and redirect (no alert)
         localStorage.setItem("loggedInEmail", email);
         window.location.href = "welcome.html";
 
@@ -174,7 +174,7 @@
       document.getElementById("register-popup").style.display = "none";
     };
 
-    
+
   </script>
 </body>
 </html>
