@@ -207,8 +207,21 @@
 
     // Run calendar render once auth is ready
     onAuthStateChanged(auth, user => {
-    if (user) renderCalendar();
+        if (user) renderCalendar();
     });
+
+    function showTab(tab) {
+        // Hide all tabs
+        document.querySelectorAll(".tab").forEach(t => t.style.display = "none");
+
+        // Show selected tab
+        document.getElementById(tab + "-tab").style.display = "block";
+
+        // Update active class on sidebar items
+        document.querySelectorAll(".sidebar li").forEach(li => li.classList.remove("active"));
+        document.querySelector(`.sidebar li[onclick="showTab('${tab}')"]`).classList.add("active");
+    }
+
   </script>
 </body>
 </html>
