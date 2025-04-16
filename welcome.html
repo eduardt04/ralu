@@ -99,7 +99,11 @@
         pauseTimer();
         document.getElementById("end-session-popup").style.display = "block";
     }
-
+    
+    window.startTimer = startTimer;
+    window.pauseTimer = pauseTimer;
+    window.endSession = endSession;
+    
     window.saveSession = async function () {
       const chapter = document.getElementById("chapter").value;
       const pages = document.getElementById("pages").value;
