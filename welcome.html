@@ -11,8 +11,8 @@
       <h2>📘 Learn Tracker</h2>
       <nav>
         <ul>
-          <li class="active" onclick="showTab('session')">📖 Learning Session</li>
-          <li onclick="showTab('history')">🕒 History</li>
+            <li id="tab-session" class="active">📖 Learning Session</li>
+            <li id="tab-history">🕒 History</li>
         </ul>
       </nav>
     </aside>
@@ -61,7 +61,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+    import { getDatabase, ref, push, get } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyD2uPoY_qjkq-G2MKBkwufZBJpE2eYNyIs",
@@ -223,7 +223,8 @@
         document.querySelector(`.sidebar li[onclick="showTab('${tab}')"]`).classList.add("active");
     }
 
-    window.showTab = showTab;
+    document.getElementById("tab-session").addEventListener("click", () => showTab("session"));
+    document.getElementById("tab-history").addEventListener("click", () => showTab("history"));
 
   </script>
 </body>
