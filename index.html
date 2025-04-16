@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Learn Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Learn Tracker</h1>
+    <div class="buttons">
+      <button onclick="togglePopup('login')">Login</button>
+      <button onclick="togglePopup('register')">Register</button>
+    </div>
+
+    <!-- Login Popup -->
+    <div id="login-popup" class="popup">
+      <form onsubmit="event.preventDefault(); loginUser();">
+        <h2>Login</h2>
+        <label>Email:</label>
+        <input type="email" id="login-username" required />
+        <label>Password:</label>
+        <input type="password" id="login-password" required />
+        <button type="submit">Login</button>
+      </form>
+    </div>
+
+    <!-- Register Popup -->
+    <div id="register-popup" class="popup">
+      <form onsubmit="event.preventDefault(); registerUser();">
+        <h2>Register</h2>
+        <label>Email:</label>
+        <input type="email" id="register-username" required />
+        <label>Password:</label>
+        <input type="password" id="register-password" required />
+        <label>Repeat Password:</label>
+        <input type="password" id="register-repeat" required />
+        <button type="submit">Register</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+    import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD2uPoY_qjkq-G2MKBkwufZBJpE2eYNyIs",
+      authDomain: "learntracker-9c9c4.firebaseapp.com",
+      databaseURL: "https://learntracker-9c9c4-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "learntracker-9c9c4",
+      storageBucket: "learntracker-9c9c4.firebasestorage.app",
+      messagingSenderId: "475357749034",
+      appId: "1:475357749034:web:3b105bdce10746bb5d8853"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    window.registerUser = async function () {
+      const email = document.getElementById("register-username").value;
+      const password = document.getElementById("register-password").value;
+      const repeat = document.getElementById("register-repeat").value;
+
+      if (password !== repeat) {
+        alert("Passwords do not match");
+        return;
+      }
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        await set(ref(db, "users/" + user.uid), {
+          email: user.email,
+          createdAt: new Date().toISOString()
+        });
+
+        alert("Registration successful! You can now login.");
+        document.getElementById("register-popup").style.display = "none";
+      } catch (error) {
+        alert("Registration failed: " + error.message);
+      }
+    };
+
+    window.loginUser = async function () {
+      const email = document.getElementById("login-username").value;
+      const password = document.getElementById("login-password").value;
+
+      try {
+        // First check if email is registered in DB
+        const snapshot = await get(ref(getDatabase(), 'users'));
+        let userFound = false;
+        snapshot.forEach(childSnap => {
+          if (childSnap.val().email === email) {
+            userFound = true;
+          }
+        });
+
+        if (!userFound) {
+          alert("User not registered.");
+          return;
+        }
+
+        // If found, try logging in
+        await signInWithEmailAndPassword(auth, email, password);
+        alert("Login successful!");
+
+        // Store email in localStorage and redirect
+        localStorage.setItem("loggedInEmail", email);
+        window.location.href = "welcome.html";
+
+      } catch (error) {
+        if (error.code === "auth/wrong-password") {
+          alert("Wrong password.");
+        } else {
+          alert("Login error: " + error.message);
+        }
+      }
+    };
+
+    window.togglePopup = function (type) {
+      document.getElementById("login-popup").style.display = "none";
+      document.getElementById("register-popup").style.display = "none";
+      if (type === "login") document.getElementById("login-popup").style.display = "block";
+      if (type === "register") document.getElementById("register-popup").style.display = "block";
+    };
+
+    window.onclick = function (event) {
+      if (event.target.classList.contains("popup")) {
+        event.target.style.display = "none";
+      }
+    };
+  </script>
+</body>
+</html>

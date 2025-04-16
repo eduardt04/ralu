@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Welcome</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1 id="welcome-text">Welcome to Learn Tracker!</h1>
+    <p style="font-size: 20px;" id="user-email"></p>
+  </div>
+
+  <script>
+    const email = localStorage.getItem("loggedInEmail");
+    if (!email) {
+      window.location.href = "index.html";
+    } else {
+      document.getElementById("user-email").textContent = "Logged in as: " + email;
+    }
+  </script>
+</body>
+</html>
