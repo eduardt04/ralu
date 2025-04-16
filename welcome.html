@@ -22,9 +22,9 @@
         <h1>Learning Session</h1>
         <div id="timer">00:00:00</div>
         <div class="timer-buttons">
-          <button onclick="startTimer()">Start Session</button>
-          <button onclick="pauseTimer()">Pause Session</button>
-          <button onclick="endSession()">End Session</button>
+            <button id="start-btn">Start Session</button>
+            <button id="pause-btn">Pause Session</button>
+            <button id="end-btn">End Session</button>
         </div>
       </section>
 
@@ -100,10 +100,10 @@
         document.getElementById("end-session-popup").style.display = "block";
     }
     
-    window.startTimer = startTimer;
-    window.pauseTimer = pauseTimer;
-    window.endSession = endSession;
-    
+    document.getElementById("start-btn").addEventListener("click", startTimer);
+    document.getElementById("pause-btn").addEventListener("click", pauseTimer);
+    document.getElementById("end-btn").addEventListener("click", endSession);
+        
     window.saveSession = async function () {
       const chapter = document.getElementById("chapter").value;
       const pages = document.getElementById("pages").value;
