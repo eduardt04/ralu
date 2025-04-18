@@ -164,7 +164,7 @@
     const startDate = currentMonth.startOf("week");
     const endDate = currentMonth.endOf("month").endOf("week");
 
-    const date = startDate.clone();
+    let date = startDate.clone();
     const user = auth.currentUser;
     let sessionData = {};
 
@@ -220,7 +220,7 @@
 
         // Update active class on sidebar items
         document.querySelectorAll(".sidebar li").forEach(li => li.classList.remove("active"));
-        document.querySelector(`.sidebar li[onclick="showTab('${tab}')"]`).classList.add("active");
+        document.getElementById(`tab-${tab}`).classList.add("active");
     }
 
     document.getElementById("tab-session").addEventListener("click", () => showTab("session"));
