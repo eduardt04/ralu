@@ -101,15 +101,17 @@
     // fade‑out / swap / fade‑in
     function updateBackground(seconds) {
       const idx = Math.min(Math.floor(seconds / 60) + 1, bgCount);
-      if (idx !== currentBgIndex) {
-        bgEl.style.opacity = "0";
-        bgEl.addEventListener("transitionend", function handler() {
-          bgEl.removeEventListener("transitionend", handler);
-          bgEl.style.backgroundImage = `url('books/${idx}.png')`;
-          bgEl.style.opacity = "1";
-        });
-        currentBgIndex = idx;
-      }
+      if (idx === currentBgIndex) return;
+      currentBgIndex = idx;
+
+      // fade out
+      bgEl.style.opacity = 0;
+
+      // after fade‐out is done, swap image & fade back in
+      setTimeout(() => {
+        bgEl.style.backgroundImage = `url('books/${idx}.png')`;
+        bgEl.style.opacity = 1;
+      }, 800); // <-- match your CSS transition: opacity 0.8s
     }
 
     // ─── Timer functions ─────────────────────────────────────────────────
