@@ -11,23 +11,28 @@
       <h2>📘 Learn Tracker</h2>
       <nav>
         <ul>
-            <li id="tab-session" class="active">📖 Learning Session</li>
-            <li id="tab-history">🕒 History</li>
+          <li id="tab-session" class="active">📖 Learning Session</li>
+          <li id="tab-history">🕒 History</li>
         </ul>
       </nav>
     </aside>
 
     <main class="content">
+      <!-- ========== SESSION TAB ========== -->
       <section id="session-tab" class="tab">
-        <h1>Learning Session</h1>
-        <div id="timer">00:00:00</div>
-        <div class="timer-buttons">
+        <!-- timer‑bg injected by JS -->
+        <div class="timer-content">
+          <h1>Learning Session</h1>
+          <div id="timer">00:00:00</div>
+          <div class="timer-buttons">
             <button id="start-btn">Start Session</button>
             <button id="pause-btn">Pause Session</button>
             <button id="end-btn">End Session</button>
+          </div>
         </div>
       </section>
 
+      <!-- ========== HISTORY TAB ========== -->
       <section id="history-tab" class="tab" style="display: none;">
         <div class="calendar-header">
           <button id="prevMonth">←</button>
@@ -38,6 +43,7 @@
       </section>
     </main>
   </div>
+
 
   <!-- End Session Popup -->
   <div id="end-session-popup" class="popup">
@@ -80,6 +86,33 @@
     let timerInterval = null;
     let totalSeconds = 0;
 
+    // ─── Inject & manage background images ───────────────────────────────
+    const bgCount = 9;
+    let currentBgIndex = 1;
+    const sessionTab = document.getElementById("session-tab");
+
+    // create the bg‑div and place it behind everything
+    const bgEl = document.createElement("div");
+    bgEl.id = "timer-bg";
+    bgEl.className = "timer-bg";
+    bgEl.style.backgroundImage = `url('books/1.png')`;
+    sessionTab.appendChild(bgEl);
+
+    // fade‑out / swap / fade‑in
+    function updateBackground(seconds) {
+      const idx = Math.min(Math.floor(seconds / 60) + 1, bgCount);
+      if (idx !== currentBgIndex) {
+        bgEl.style.opacity = "0";
+        bgEl.addEventListener("transitionend", function handler() {
+          bgEl.removeEventListener("transitionend", handler);
+          bgEl.style.backgroundImage = `url('books/${idx}.png')`;
+          bgEl.style.opacity = "1";
+        });
+        currentBgIndex = idx;
+      }
+    }
+
+    // ─── Timer functions ─────────────────────────────────────────────────
     function startTimer() {
         if (timerInterval) return; // prevent multiple intervals
         timerInterval = setInterval(() => {
