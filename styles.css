@@ -40,7 +40,7 @@ body.home-page {
   );
   z-index: 1;
 }
-/* Foreground text */
+/* Foreground content sits above both layers */
 .split-left .overlay {
   position: relative;
   z-index: 2;
@@ -143,16 +143,18 @@ body {
   background-color: #3f3b6d;
 }
 
-/* Main content area – removed padding/background for full‑bleed */
+/* Main content area */
 .content {
   flex-grow: 1;
-  padding: 0;
+  padding: 0;                /* removed padding for full‑bleed */
   background-color: transparent;
 }
+.content h1 {
+  color: #6a1b9a;
+  margin-bottom: 30px;
+}
 
-/* -----------------------------------
-   SESSION TAB: FULL‑BLEED BACKGROUND
------------------------------------ */
+/* ─── SESSION TAB: FULL‑BLEED BLURRED BG & CENTERED TIMER ───────────────────────── */
 #session-tab {
   position: relative;
   width: 100%;
@@ -195,8 +197,21 @@ body {
   color: #fff;
   margin: 0.5rem 0 1.5rem;
 }
+/* Session controls */
 .timer-content .timer-buttons button {
+  background-color: #ab47bc;
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 8px;
   margin: 0 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.timer-content .timer-buttons button:hover {
+  background-color: #8e24aa;
+  transform: scale(1.05);
 }
 
 /* -----------------------------------
@@ -285,6 +300,7 @@ body {
 .close-popup:hover {
   background-color: rgba(106,27,154,0.1);
 }
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-10px); }
   to   { opacity: 1; transform: translateY(0); }
