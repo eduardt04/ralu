@@ -100,7 +100,8 @@
 
     // fade‑out / swap / fade‑in
     function updateBackground(seconds) {
-      const idx = Math.min(Math.floor(seconds / 60) + 1, bgCount);
+      const idx = Math.min(Math.floor(seconds / 30) + 1, bgCount);
+      console.log(`seconds=${seconds}, idx=${idx}, current=${currentBgIndex}`);
       if (idx === currentBgIndex) return;
       currentBgIndex = idx;
 
