@@ -103,8 +103,7 @@ body.home-page {
   z-index: 2000;
 }
 
-/* --- Original Styles --- */
-/* Reset + base */
+/* --- Reset + Base Styles --- */
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
@@ -117,6 +116,7 @@ body {
   height: 100vh;
 }
 
+/* Sidebar */
 .sidebar {
   background-color: #2e2b4f;
   color: white;
@@ -124,19 +124,16 @@ body {
   width: 240px;
   min-height: 100vh;
 }
-
 .sidebar h2 {
   color: #c084f5;
   font-size: 22px;
   margin-bottom: 30px;
 }
-
 .sidebar ul {
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
-
 .sidebar li {
   padding: 12px 16px;
   margin-bottom: 8px;
@@ -144,7 +141,6 @@ body {
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
-
 .sidebar li:hover,
 .sidebar li.active {
   background-color: #3f3b6d;
@@ -156,13 +152,12 @@ body {
   padding: 40px;
   background-color: #f8ecff;
 }
-
 .content h1 {
   color: #6a1b9a;
   margin-bottom: 30px;
 }
 
-/* Timer default styling */
+/* Default Timer styling */
 #timer {
   font-size: 48px;
   font-weight: bold;
@@ -170,6 +165,7 @@ body {
   color: #4a148c;
 }
 
+/* Timer buttons */
 .timer-buttons button {
   background-color: #ab47bc;
   border: none;
@@ -181,7 +177,6 @@ body {
   cursor: pointer;
   transition: all 0.2s ease;
 }
-
 .timer-buttons button:hover {
   background-color: #8e24aa;
   transform: scale(1.05);
@@ -198,7 +193,6 @@ body {
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 2000;
 }
-
 .popup form {
   position: relative;
   background-color: #fff;
@@ -214,19 +208,18 @@ body {
   align-items: center;
   text-align: center;
 }
-
 .popup h2 {
   margin-bottom: 20px;
   color: #6a1b9a;
 }
 
+/* Labels, inputs and selects */
 .popup label {
   width: 80%;
   margin-bottom: 4px;
   color: #4a148c;
   font-weight: 500;
 }
-
 .popup input,
 .popup select {
   width: 80%;
@@ -237,7 +230,6 @@ body {
   margin-bottom: 15px;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
-
 .popup input:focus,
 .popup select:focus {
   border-color: #ab47bc;
@@ -245,6 +237,24 @@ body {
   outline: none;
 }
 
+/* Submit button in popup */
+.popup button[type="submit"] {
+  width: 80%;
+  background-color: #ab47bc;
+  color: white;
+  padding: 12px;
+  border: none;
+  font-size: 16px;
+  border-radius: 8px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.popup button[type="submit"]:hover {
+  background-color: #8e24aa;
+}
+
+/* Close arrow */
 .close-popup {
   position: absolute;
   top: 10px;
@@ -261,6 +271,7 @@ body {
   background-color: rgba(106,27,154,0.1);
 }
 
+/* FadeIn animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -298,17 +309,14 @@ body {
   text-align: center;
   padding: 60px 20px;
 }
-
 .container h1 {
   color: #6a1b9a;
   font-size: 48px;
   margin-bottom: 30px;
 }
-
 .buttons {
   margin: 20px;
 }
-
 .buttons button {
   background-color: #ab47bc;
   border: none;
@@ -320,7 +328,6 @@ body {
   cursor: pointer;
   transition: all 0.2s ease;
 }
-
 .buttons button:hover {
   background-color: #8e24aa;
   transform: scale(1.05);
@@ -333,7 +340,6 @@ body {
   align-items: center;
   margin-bottom: 15px;
 }
-
 .calendar-header button {
   background-color: #ab47bc;
   color: white;
@@ -343,13 +349,11 @@ body {
   border-radius: 8px;
   cursor: pointer;
 }
-
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 8px;
 }
-
 .calendar-day {
   background-color: #e1bee7;
   border-radius: 10px;
@@ -360,17 +364,14 @@ body {
   display: flex;
   flex-direction: column;
 }
-
 .calendar-day.disabled {
   background-color: #f3e5f5;
   color: #aaa;
 }
-
 .day-header {
   font-weight: bold;
   margin-bottom: 6px;
 }
-
 .session-entry {
   background-color: #fff;
   padding: 5px 8px;
@@ -392,7 +393,6 @@ body {
   align-items: center;
   justify-content: center;
 }
-
 #session-tab::before {
   content: "";
   position: absolute;
@@ -400,7 +400,6 @@ body {
   background: rgba(106,27,154,0.4);
   z-index: 3;
 }
-
 .timer-bg {
   position: absolute;
   inset: 0;
@@ -411,19 +410,16 @@ body {
   opacity: 1;
   z-index: 2;
 }
-
 .timer-content {
   position: relative;
   z-index: 4;
   text-align: center;
   color: #fff;
 }
-
 .timer-content #timer {
   font-size: 8rem;
   margin: 0.5rem 0 1.5rem;
 }
-
 .timer-content .timer-buttons button {
   margin: 0 0.5rem;
 }
