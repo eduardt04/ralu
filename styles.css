@@ -1,22 +1,24 @@
-/* --- Home‑page Split‑layout Styles --- */
-body.home-page {
+/* --- Global --- */
+html, body {
+  height: 100%;
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
-  background: #6a1b9a;
 }
 
+/* --- Home‑page Split‑layout Styles --- */
+body.home-page {
+  background: #6a1b9a;
+}
 .split-container {
   display: flex;
   min-height: 100vh;
 }
-
 .split {
   flex: 1;
   position: relative;
   overflow: hidden;
 }
-
-/* LEFT PANEL with full‑bleed blurred book background and purple gradient overlay */
+/* LEFT PANEL: full‑bleed blurred book image + purple overlay */
 .split-left {
   position: relative;
 }
@@ -26,8 +28,8 @@ body.home-page {
   inset: 0;
   background: url('books/1.png') center/cover no-repeat;
   filter: blur(8px) brightness(0.7);
-  z-index: 0;
   transition: background-image 0.8s ease-in-out;
+  z-index: 0;
 }
 .split-left::after {
   content: "";
@@ -35,12 +37,11 @@ body.home-page {
   inset: 0;
   background: linear-gradient(
     to bottom right,
-    rgba(106, 27, 154, 0.5),
-    rgba(171, 71, 188, 0.5)
+    rgba(106,27,154,0.5),
+    rgba(171,71,188,0.5)
   );
   z-index: 1;
 }
-/* Foreground content sits above both layers */
 .split-left .overlay {
   position: relative;
   z-index: 2;
@@ -59,7 +60,7 @@ body.home-page {
   line-height: 1.5;
 }
 
-/* RIGHT PANEL with buttons */
+/* RIGHT PANEL: auth buttons */
 .split-right {
   background: #fff;
   display: flex;
@@ -95,31 +96,45 @@ body.home-page {
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-/* ensure popups stack above split panels */
-.popup {
-  z-index: 2000;
+/* --- Original landing‑page container (index.html) --- */
+.container {
+  text-align: center;
+  padding: 60px 20px;
+}
+.container h1 {
+  color: #6a1b9a;
+  font-size: 48px;
+  margin-bottom: 30px;
+}
+.buttons {
+  margin: 20px;
+}
+.buttons button {
+  background-color: #ab47bc;
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  font-size: 18px;
+  margin: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.buttons button:hover {
+  background-color: #8e24aa;
+  transform: scale(1.05);
 }
 
-/* --- Reset + Base Styles --- */
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f3e5f5;
-}
-
-/* Dashboard layout */
+/* --- Dashboard & Sidebar --- */
 .dashboard {
   display: flex;
   height: 100vh;
 }
-
-/* Sidebar */
 .sidebar {
   background-color: #2e2b4f;
   color: white;
   padding: 20px;
   width: 240px;
-  min-height: 100vh;
 }
 .sidebar h2 {
   color: #c084f5;
@@ -127,7 +142,7 @@ body {
   margin-bottom: 30px;
 }
 .sidebar ul {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
   margin: 0;
 }
@@ -136,33 +151,32 @@ body {
   margin-bottom: 8px;
   border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s;
 }
 .sidebar li:hover,
 .sidebar li.active {
   background-color: #3f3b6d;
 }
 
-/* Main content area */
+/* .content flex‑centers its children */
 .content {
-  flex-grow: 1;
-  padding: 0;                /* removed padding for full‑bleed */
-  background-color: transparent;
-}
-.content h1 {
-  color: #6a1b9a;
-  margin-bottom: 30px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
 }
 
-/* ─── SESSION TAB: FULL‑BLEED BLURRED BG & CENTERED TIMER ───────────────────────── */
+/* --- Session Tab: Full‑Bleed Blurred BG & Centered Timer --- */
 #session-tab {
   position: relative;
   width: 100%;
   height: 100%;
-  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 #session-tab::before {
   content: "";
@@ -183,70 +197,62 @@ body {
 }
 .timer-content {
   position: relative;
-  z-index: 4;
   text-align: center;
   color: #fff;
+  z-index: 4;
 }
 .timer-content h1 {
   font-size: 4rem;
-  color: #fff;
   margin-bottom: 1rem;
 }
 .timer-content #timer {
   font-size: 8rem;
-  color: #fff;
   margin: 0.5rem 0 1.5rem;
 }
-/* Session controls */
+/* Session control buttons */
 .timer-content .timer-buttons button {
   background-color: #ab47bc;
   border: none;
-  color: white;
+  color: #fff;
   padding: 12px 24px;
   font-size: 16px;
   border-radius: 8px;
   margin: 0 0.5rem;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: background-color 0.2s, transform 0.2s;
 }
 .timer-content .timer-buttons button:hover {
   background-color: #8e24aa;
   transform: scale(1.05);
 }
 
-/* -----------------------------------
-   Popup & Form Styles
------------------------------------ */
+/* --- Popups & Forms --- */
 .popup {
   display: none;
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
   z-index: 2000;
 }
 .popup form {
   position: relative;
-  background-color: #fff;
+  background: #fff;
   padding: 30px 25px;
-  width: 90%;
-  max-width: 400px;
+  width: 90%; max-width: 400px;
   margin: 100px auto;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-  animation: fadeIn 0.3s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  animation: fadeIn 0.3s ease;
 }
 .popup h2 {
   margin-bottom: 20px;
   color: #6a1b9a;
 }
-/* Labels, inputs and selects */
 .popup label {
   width: 80%;
   margin-bottom: 4px;
@@ -267,28 +273,24 @@ body {
 .popup select:focus {
   border-color: #ab47bc;
   box-shadow: 0 0 8px rgba(171,71,188,0.3);
-  outline: none;
 }
-/* Submit button */
 .popup button[type="submit"] {
   width: 80%;
-  background-color: #ab47bc;
-  color: white;
+  background: #ab47bc;
+  color: #fff;
   padding: 12px;
   border: none;
   font-size: 16px;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background 0.2s;
 }
 .popup button[type="submit"]:hover {
-  background-color: #8e24aa;
+  background: #8e24aa;
 }
-/* Close arrow */
 .close-popup {
   position: absolute;
-  top: 10px;
-  right: 15px;
+  top: 10px; right: 15px;
   font-size: 20px;
   font-weight: bold;
   color: #6a1b9a;
@@ -298,17 +300,10 @@ body {
   transition: background 0.2s;
 }
 .close-popup:hover {
-  background-color: rgba(106,27,154,0.1);
+  background: rgba(106,27,154,0.1);
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* -----------------------------------
-   History Calendar Styles
------------------------------------ */
+/* --- History Calendar Styles --- */
 .calendar-header {
   display: flex;
   justify-content: space-between;
@@ -316,8 +311,8 @@ body {
   margin-bottom: 15px;
 }
 .calendar-header button {
-  background-color: #ab47bc;
-  color: white;
+  background: #ab47bc;
+  color: #fff;
   border: none;
   padding: 8px 14px;
   font-size: 16px;
@@ -330,7 +325,7 @@ body {
   gap: 8px;
 }
 .calendar-day {
-  background-color: #e1bee7;
+  background: #e1bee7;
   border-radius: 10px;
   padding: 10px;
   min-height: 100px;
@@ -340,7 +335,7 @@ body {
   flex-direction: column;
 }
 .calendar-day.disabled {
-  background-color: #f3e5f5;
+  background: #f3e5f5;
   color: #aaa;
 }
 .day-header {
@@ -348,7 +343,7 @@ body {
   margin-bottom: 6px;
 }
 .session-entry {
-  background-color: #fff;
+  background: #fff;
   padding: 5px 8px;
   margin-bottom: 6px;
   border-radius: 6px;
@@ -357,21 +352,16 @@ body {
   line-height: 1.4;
 }
 
-/* Responsive sidebar on small screens */
-@media screen and (max-width: 768px) {
-  .dashboard {
-    flex-direction: column;
-  }
-  .sidebar {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .sidebar li {
-    margin: 4px;
-  }
-  .content {
-    padding: 20px;
-  }
+/* Fade‑in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .dashboard { flex-direction: column; }
+  .sidebar { width: 100%; display: flex; flex-wrap: wrap; justify-content: center; }
+  .sidebar li { margin: 4px; }
+  .content { padding: 20px; }
 }
