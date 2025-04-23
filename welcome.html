@@ -226,16 +226,22 @@
       const pages = document.getElementById("pages").value;
       const satisfaction = document.getElementById("satisfaction").value;
 
+      // Ensure we pause the timer and clear interval first
+      clearInterval(timerInterval);
+      timerInterval = null;
+
+      const finalDuration = totalSeconds;
+
       onAuthStateChanged(auth, async user => {
         if (user) {
-          const duration = totalSeconds; // ← move this inside!
           const sessionData = {
             chapter,
             pages,
             satisfaction,
-            duration,
+            duration: finalDuration,  // Use captured value
             endedAt: new Date().toISOString()
           };
+
           await push(ref(db, "sessions/" + user.uid), sessionData);
           alert("Session saved!");
           closePopups();
@@ -243,14 +249,14 @@
           alert("User not logged in.");
         }
 
-        // Now reset everything safely
+        // Clear and reset everything
         totalSeconds = 0;
         accumulatedSeconds = 0;
         updateTimerDisplay();
         localStorage.removeItem("sessionStart");
         localStorage.removeItem("accumulatedSeconds");
       });
-    };  
+    };
 
     window.closePopups = function () {
       document.getElementById("end-session-popup").style.display = "none";
