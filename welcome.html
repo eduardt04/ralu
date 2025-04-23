@@ -132,7 +132,7 @@
 
     // ─── Timer functions ─────────────────────────────────────────────────
     function startTimer() {
-      if (timerInterval) return;
+      if (timerInterval || isPaused) return;
 
       const now = Date.now();
       if (!localStorage.getItem("sessionStart")) {
@@ -148,14 +148,30 @@
     }
 
     function pauseTimer() {
-      clearInterval(timerInterval);
-      timerInterval = null;
+      if (isPaused) {
+        // RESUME
+        localStorage.setItem("sessionStart", Date.now());
+        startTimer();
 
-      const sessionStart = parseInt(localStorage.getItem("sessionStart"));
-      const now = Date.now();
-      accumulatedSeconds += Math.floor((now - sessionStart) / 1000);
-      localStorage.removeItem("sessionStart"); // session is paused
-      localStorage.setItem("accumulatedSeconds", accumulatedSeconds);
+        isPaused = false;
+        document.getElementById("pause-btn").textContent = "Pause Session";
+        document.getElementById("start-btn").disabled = true;
+      } else {
+        // PAUSE
+        clearInterval(timerInterval);
+        timerInterval = null;
+
+        const sessionStart = parseInt(localStorage.getItem("sessionStart"));
+        const now = Date.now();
+        accumulatedSeconds += Math.floor((now - sessionStart) / 1000);
+
+        localStorage.removeItem("sessionStart");
+        localStorage.setItem("accumulatedSeconds", accumulatedSeconds);
+
+        isPaused = true;
+        document.getElementById("pause-btn").textContent = "Resume Session";
+        document.getElementById("start-btn").disabled = true;
+      }
     }
 
     function updateTimerDisplay() {
@@ -167,14 +183,30 @@
     }
 
     function endSession() {
-        pauseTimer();
-        document.getElementById("end-session-popup").style.display = "block";
+      clearInterval(timerInterval);
+      timerInterval = null;
+
+      totalSeconds = 0;
+      accumulatedSeconds = 0;
+      isPaused = false;
+
+      localStorage.removeItem("sessionStart");
+      localStorage.removeItem("accumulatedSeconds");
+
+      document.getElementById("timer").textContent = "00:00:00";
+      document.getElementById("start-btn").disabled = false;
+      document.getElementById("pause-btn").textContent = "Pause Session";
+
+      document.getElementById("end-session-popup").style.display = "block";
     }
     
-    document.getElementById("start-btn").addEventListener("click", startTimer);
+    document.getElementById("start-btn").addEventListener("click", () => {
+      startTimer();
+      document.getElementById("start-btn").disabled = true;
+    });
     document.getElementById("pause-btn").addEventListener("click", pauseTimer);
     document.getElementById("end-btn").addEventListener("click", endSession);
-        
+            
     window.saveSession = async function () {
       const chapter = document.getElementById("chapter").value;
       const pages = document.getElementById("pages").value;
