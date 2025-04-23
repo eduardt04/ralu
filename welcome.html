@@ -200,16 +200,9 @@
       clearInterval(timerInterval);
       timerInterval = null;
 
-      totalSeconds = 0;
-      accumulatedSeconds = 0;
       isPaused = false;
-
-      localStorage.removeItem("sessionStart");
-      localStorage.removeItem("accumulatedSeconds");
-
-      document.getElementById("timer").textContent = "00:00:00";
-      document.getElementById("start-btn").disabled = false;
       document.getElementById("pause-btn").textContent = "Pause Session";
+      document.getElementById("start-btn").disabled = false;
 
       document.getElementById("end-session-popup").style.display = "block";
     }
