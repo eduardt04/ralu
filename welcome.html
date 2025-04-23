@@ -84,6 +84,7 @@
     const db = getDatabase(app);
 
     let timerInterval = null;
+    let isPaused = false;
     let totalSeconds = 0;
     let accumulatedSeconds = 0; // saved between pauses
 
