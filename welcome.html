@@ -226,19 +226,25 @@
       const pages = document.getElementById("pages").value;
       const satisfaction = document.getElementById("satisfaction").value;
 
-      // Ensure we pause the timer and clear interval first
+      // Safely clear the interval
       clearInterval(timerInterval);
       timerInterval = null;
 
+      // ⏱️ DEBUG: Log totalSeconds at this point
+      console.log("[DEBUG] totalSeconds before save:", totalSeconds);
+
+      // Calculate duration BEFORE anything async
       const finalDuration = totalSeconds;
 
       onAuthStateChanged(auth, async user => {
         if (user) {
+          console.log("[DEBUG] Saving session with duration:", finalDuration);
+
           const sessionData = {
             chapter,
             pages,
             satisfaction,
-            duration: finalDuration,  // Use captured value
+            duration: finalDuration,
             endedAt: new Date().toISOString()
           };
 
@@ -249,7 +255,7 @@
           alert("User not logged in.");
         }
 
-        // Clear and reset everything
+        // Reset everything
         totalSeconds = 0;
         accumulatedSeconds = 0;
         updateTimerDisplay();
