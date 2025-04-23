@@ -132,7 +132,7 @@
 
     // ─── Timer functions ─────────────────────────────────────────────────
     function startTimer() {
-      if (timerInterval || isPaused) return;
+      if (timerInterval) return;
 
       let storedStart = localStorage.getItem("sessionStart");
       if (!storedStart) {
@@ -151,14 +151,23 @@
     }
 
     function pauseTimer() {
+      const pauseBtn = document.getElementById("pause-btn");
+      const startBtn = document.getElementById("start-btn");
+
       if (isPaused) {
         // RESUME
-        localStorage.setItem("sessionStart", Date.now());
-        startTimer();
-
+        localStorage.setItem("sessionStart", Date.now()); // set a fresh start timestamp
         isPaused = false;
-        document.getElementById("pause-btn").textContent = "Pause Session";
-        document.getElementById("start-btn").disabled = true;
+        startBtn.disabled = true;
+        pauseBtn.textContent = "Pause Session";
+
+        // Resume the interval (this is the key part!)
+        timerInterval = setInterval(() => {
+          const sessionStart = parseInt(localStorage.getItem("sessionStart"));
+          const now = Date.now();
+          totalSeconds = accumulatedSeconds + Math.floor((now - sessionStart) / 1000);
+          updateTimerDisplay();
+        }, 1000);
       } else {
         // PAUSE
         clearInterval(timerInterval);
@@ -166,16 +175,18 @@
 
         const sessionStart = parseInt(localStorage.getItem("sessionStart"));
         const now = Date.now();
-        accumulatedSeconds += Math.floor((now - sessionStart) / 1000);
+        if (!isNaN(sessionStart)) {
+          accumulatedSeconds += Math.floor((now - sessionStart) / 1000);
+        }
 
         localStorage.removeItem("sessionStart");
         localStorage.setItem("accumulatedSeconds", accumulatedSeconds);
 
         isPaused = true;
-        document.getElementById("pause-btn").textContent = "Resume Session";
-        document.getElementById("start-btn").disabled = true;
+        pauseBtn.textContent = "Resume Session";
+        startBtn.disabled = true;
       }
-    }
+    }     
 
     function updateTimerDisplay() {
         const hrs = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
@@ -215,12 +226,9 @@
       const pages = document.getElementById("pages").value;
       const satisfaction = document.getElementById("satisfaction").value;
 
-      const duration = totalSeconds;
-      totalSeconds = 0;
-      document.getElementById("timer").textContent = "00:00:00";
-
       onAuthStateChanged(auth, async user => {
         if (user) {
+          const duration = totalSeconds; // ← move this inside!
           const sessionData = {
             chapter,
             pages,
@@ -234,13 +242,15 @@
         } else {
           alert("User not logged in.");
         }
+
+        // Now reset everything safely
+        totalSeconds = 0;
+        accumulatedSeconds = 0;
+        updateTimerDisplay();
+        localStorage.removeItem("sessionStart");
+        localStorage.removeItem("accumulatedSeconds");
       });
-      totalSeconds = 0;
-      updateTimerDisplay();
-      localStorage.removeItem("sessionStart");
-      localStorage.removeItem("accumulatedSeconds");
-      accumulatedSeconds = 0;
-    };
+    };  
 
     window.closePopups = function () {
       document.getElementById("end-session-popup").style.display = "none";
