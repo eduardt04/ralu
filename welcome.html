@@ -226,20 +226,22 @@
       const pages = document.getElementById("pages").value;
       const satisfaction = document.getElementById("satisfaction").value;
 
-      // Safely clear the interval
       clearInterval(timerInterval);
       timerInterval = null;
 
-      // ⏱️ DEBUG: Log totalSeconds at this point
-      console.log("[DEBUG] totalSeconds before save:", totalSeconds);
+      // Account for any remaining live time
+      const sessionStart = parseInt(localStorage.getItem("sessionStart"));
+      const now = Date.now();
+      let liveDuration = 0;
 
-      // Calculate duration BEFORE anything async
-      const finalDuration = totalSeconds;
+      if (!isNaN(sessionStart)) {
+        liveDuration = Math.floor((now - sessionStart) / 1000);
+      }
+
+      const finalDuration = accumulatedSeconds + liveDuration;
 
       onAuthStateChanged(auth, async user => {
         if (user) {
-          console.log("[DEBUG] Saving session with duration:", finalDuration);
-
           const sessionData = {
             chapter,
             pages,
@@ -248,6 +250,7 @@
             endedAt: new Date().toISOString()
           };
 
+          console.log("[DEBUG] Saving session with duration:", finalDuration);
           await push(ref(db, "sessions/" + user.uid), sessionData);
           alert("Session saved!");
           closePopups();
@@ -258,9 +261,12 @@
         // Reset everything
         totalSeconds = 0;
         accumulatedSeconds = 0;
+        isPaused = false;
         updateTimerDisplay();
         localStorage.removeItem("sessionStart");
         localStorage.removeItem("accumulatedSeconds");
+        document.getElementById("start-btn").disabled = false;
+        document.getElementById("pause-btn").textContent = "Pause Session";
       });
     };
 
