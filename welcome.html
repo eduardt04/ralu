@@ -91,12 +91,11 @@
     window.addEventListener("load", () => {
       const storedStart = localStorage.getItem("sessionStart");
       const storedAccumulated = parseInt(localStorage.getItem("accumulatedSeconds") || "0");
-      accumulatedSeconds = storedAccumulated;
+      accumulatedSeconds = isNaN(storedAccumulated) ? 0 : storedAccumulated;
 
-      if (storedStart) {
-        startTimer(); // resume live timing
+      if (storedStart && !isNaN(parseInt(storedStart))) {
+        startTimer();
       } else {
-        // Show paused time
         totalSeconds = accumulatedSeconds;
         updateTimerDisplay();
       }
@@ -135,13 +134,16 @@
     function startTimer() {
       if (timerInterval || isPaused) return;
 
-      const now = Date.now();
-      if (!localStorage.getItem("sessionStart")) {
+      let storedStart = localStorage.getItem("sessionStart");
+      if (!storedStart) {
+        const now = Date.now();
         localStorage.setItem("sessionStart", now);
+        storedStart = now;
       }
 
       timerInterval = setInterval(() => {
         const sessionStart = parseInt(localStorage.getItem("sessionStart"));
+        if (!sessionStart) return; // safety check
         const now = Date.now();
         totalSeconds = accumulatedSeconds + Math.floor((now - sessionStart) / 1000);
         updateTimerDisplay();
